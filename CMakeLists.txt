@@ -1,17 +1,17 @@
 # Copyright (C) 2020 Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com>
 #
-# This program is free software:  you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published  by
-# the Free Software Foundation, either version 3 of the License, or (at
-# your option) any later version.
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
 #
-# This program is distributed in the hope that it will be  useful,
-# but WITHOUT ANY WARRANTY;   without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# General Public License for more details.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program. If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 cmake_minimum_required(VERSION 3.16)
@@ -19,9 +19,11 @@ cmake_policy(SET CMP0048 NEW)
 
 project(yetam
         VERSION 0.9.0
-        DESCRIPTION "Yet a Minecraft server manager!"
+        DESCRIPTION "Yet another Minecraft server manager! "
         HOMEPAGE_URL "https://github.com/beatussum/yetam/"
         LANGUAGES CXX)
+
+option(WITH_DOC "Build the documentation" OFF)
 
 unset(CMAKE_CXX_FLAGS_RELEASE CACHE)
 macro(add_gcc_cxx_flags _flags)
@@ -30,22 +32,37 @@ macro(add_gcc_cxx_flags _flags)
     endif()
 endmacro()
 
-# Use ccache if it is installed
+# Use ccache if installed
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
 endif()
 
-set(DOCS_DIR "${CMAKE_BINARY_DIR}/docs" CACHE PATH
-    "The path where the documentation is built")
+set(EXPORT_DIR "${CMAKE_BINARY_DIR}/exports" CACHE PATH
+    "The path where the export header is generated")
 
-find_package(Doxygen REQUIRED)
-set(DOXYGEN_OUTPUT_DIRECTORY "${DOCS_DIR}")
-set(DOXYGEN_INLINE_INHERITED_MEMB YES)
-set(DOXYGEN_HIDE_UNDOC_CLASSES YES)
-set(DOXYGEN_HIDE_IN_BODY_DOCS YES)
-set(DOXYGEN_WARN_NO_PARAMDOC YES)
-set(DOXYGEN_WARN_LOGFILE "${DOCS_DIR}/log")
+if (WITH_DOC)
+    set(DOC_DIR "${CMAKE_BINARY_DIR}/doc" CACHE PATH
+        "The path where the documentation is built")
+
+    find_package(Doxygen REQUIRED)
+
+    set(DOXYGEN_OUTPUT_DIRECTORY "${DOC_DIR}")
+    set(DOXYGEN_INLINE_INHERITED_MEMB YES)
+    set(DOXYGEN_ALIASES "pexample=@par Example")
+    set(DOXYGEN_HIDE_UNDOC_CLASSES YES)
+    set(DOXYGEN_HIDE_IN_BODY_DOCS YES)
+    set(DOXYGEN_WARN_NO_PARAMDOC YES)
+    set(DOXYGEN_WARN_LOGFILE "${DOC_DIR}/log")
+endif()
+
+macro(add_to_doc _headers)
+    if (WITH_DOC)
+        doxygen_add_docs(doc
+                         "${_headers}"
+                         COMMENT "Generating documentation…")
+    endif()
+endmacro()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
