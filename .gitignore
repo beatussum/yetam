@@ -18,3 +18,7 @@
 
 # Visual Studio Code
 /.vscode/
+
+# KDevelop
+/.kdev4/
+/yetam.kdev4
