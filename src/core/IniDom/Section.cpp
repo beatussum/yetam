@@ -18,7 +18,7 @@
 
 #include "Section.hpp"
 
-#include <stdexcept>
+#include <algorithm>
 
 namespace IniDom
 {
@@ -78,13 +78,23 @@ namespace IniDom
         return *this;
     }
 
-    Section& Section::find_subsection(const std::string_view __name)
+    Section& Section::find_subsection(const std::string& __name)
     {
-        return find_by_name(m_subsections_, __name);
+        return *std::find_if(m_subsections_.begin(), m_subsections_.end(),
+            [&](const Section& __r) {
+                if (__r.m_name_.size() < ( __name.size() + 1 ))
+                    return false;
+
+                return __r.m_name_.compare( __r.m_name_.size() - ( __name.size() + 1 )
+                                          , std::string::npos, '/' + __name) == 0;
+            }
+        );
     }
 
     Parameter& Section::find_parameter(const std::string_view __name)
     {
-        return find_by_name(m_parameters_, __name);
+        return *std::find_if(m_parameters_.begin(), m_parameters_.end(),
+            [&](const Parameter& __r) { return __r.m_name_ == __name; }
+        );
     }
 }

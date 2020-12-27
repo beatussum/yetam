@@ -17,8 +17,7 @@
 set(YETAM_HPP
     core/IniDom/Parameter.hpp
     core/IniDom/Section.hpp)
-set(YETAM_IPP
-    core/IniDom/Section.ipp)
+set(YETAM_IPP)
 set(YETAM_CPP
     core/IniDom/Parameter.cpp
     core/IniDom/Section.cpp

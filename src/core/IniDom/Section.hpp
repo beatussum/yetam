@@ -30,10 +30,6 @@ namespace IniDom
     private:
         using subsections_t = std::list<Section>;
         using parameters_t = std::list<Parameter>;
-    private:
-        template <class _Container>
-        typename _Container::reference find_by_name( _Container&
-                                                   , const std::string_view __name);
     public:
         Section() noexcept = default;
         explicit Section(std::string __name);
@@ -48,7 +44,7 @@ namespace IniDom
         Section& operator<<(Section);
         Section& operator<<(Parameter);
 
-        Section& find_subsection(const std::string_view __name);
+        Section& find_subsection(const std::string& __name);
         Parameter& find_parameter(const std::string_view __name);
     private:
         std::string m_name_;
@@ -57,5 +53,4 @@ namespace IniDom
     };
 }
 
-#include "Section.ipp"
 #endif // YETAM_INIDOM_SECTION_HPP
