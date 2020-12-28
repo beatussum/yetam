@@ -16,31 +16,37 @@
  */
 
 
-#ifndef YETAM_INIDOM_PARAMETER_HPP
-#define YETAM_INIDOM_PARAMETER_HPP
-
 #include "converters.hpp"
 
 namespace IniDom
 {
-    class Parameter
+    std::string converter<bool>::convert(const bool __v)
     {
-        friend class Section;
-    public:
-        template <class _T>
-        Parameter(std::string __name, _T&& __value)
-            : m_name_(std::move(__name))
-            , m_value_(converter<_T>::convert(std::forward<_T>(__value)))
-        {}
-    public:
-        template <class _T>
-        _T as() const { return converter<_T>::deconvert(m_value_); }
+        return __v ? "true" : "false";
+    }
 
-        explicit operator std::string() const;
-    private:
-        std::string m_name_;
-        std::string m_value_;
-    };
+    bool converter<bool>::deconvert(const std::string_view __s)
+    {
+        return __s == "true";
+    }
+
+    std::string converter<char>::convert(const char __v)
+    {
+        return std::string(1, __v);
+    }
+
+    char converter<char>::deconvert(const std::string_view __s)
+    {
+        return __s.front();
+    }
+
+    std::string converter<std::string>::convert(const std::string __v)
+    {
+        return __v;
+    }
+
+    std::string converter<std::string>::deconvert(const std::string_view __s)
+    {
+        return static_cast<std::string>(__s);
+    }
 }
-
-#endif // YETAM_INIDOM_PARAMETER_HPP

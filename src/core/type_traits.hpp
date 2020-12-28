@@ -16,31 +16,24 @@
  */
 
 
-#ifndef YETAM_INIDOM_PARAMETER_HPP
-#define YETAM_INIDOM_PARAMETER_HPP
+#ifndef YETAM_CORE_TYPE_TRAITS_HPP
+#define YETAM_CORE_TYPE_TRAITS_HPP
 
-#include "converters.hpp"
+#include <string>
 
-namespace IniDom
-{
-    class Parameter
-    {
-        friend class Section;
-    public:
-        template <class _T>
-        Parameter(std::string __name, _T&& __value)
-            : m_name_(std::move(__name))
-            , m_value_(converter<_T>::convert(std::forward<_T>(__value)))
-        {}
-    public:
-        template <class _T>
-        _T as() const { return converter<_T>::deconvert(m_value_); }
+template <class _T>
+struct is_cstring_like
+    : public std::integral_constant<
+          bool,
+             std::is_convertible_v<_T, std::string>
+          && std::is_convertible_v<
+                 decltype(std::string().data()),
+                 decltype(std::begin(std::declval<_T>()))
+             >
+      >
+{};
 
-        explicit operator std::string() const;
-    private:
-        std::string m_name_;
-        std::string m_value_;
-    };
-}
+template <class _T>
+using is_cstring_like_t = typename is_cstring_like<_T>::type;
 
-#endif // YETAM_INIDOM_PARAMETER_HPP
+#endif // YETAM_CORE_TYPE_TRAITS_HPP

@@ -15,10 +15,13 @@
 
 
 set(YETAM_HPP
+    core/type_traits.hpp
+    core/IniDom/converters.hpp
     core/IniDom/Parameter.hpp
     core/IniDom/Section.hpp)
 set(YETAM_IPP)
 set(YETAM_CPP
+    core/IniDom/converters.cpp
     core/IniDom/Parameter.cpp
     core/IniDom/Section.cpp
     main.cpp)

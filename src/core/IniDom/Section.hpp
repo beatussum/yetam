@@ -30,6 +30,8 @@ namespace IniDom
     private:
         using subsections_t = std::list<Section>;
         using parameters_t = std::list<Parameter>;
+    private:
+        void check_name(const std::string_view) const;
     public:
         Section() noexcept = default;
         explicit Section(std::string __name);
