@@ -21,16 +21,27 @@
 
 #include <string>
 
+template <class _T, typename _enabled = std::true_type>
+struct is_cstring_like : public std::false_type {};
+
 template <class _T>
-struct is_cstring_like
-    : public std::integral_constant<
-          bool,
-             std::is_convertible_v<_T, std::string>
-          && std::is_convertible_v<
-                 decltype(std::string().data()),
-                 decltype(std::begin(std::declval<_T>()))
-             >
-      >
+struct is_cstring_like<
+    _T,
+    typename std::is_convertible<
+        decltype(std::string().data()),
+        _T
+    >::type>
+    : public std::true_type
+{};
+
+template <class _T>
+struct is_cstring_like<
+    _T,
+    typename std::is_convertible<
+        decltype(std::string().data()),
+        decltype(std::begin(std::declval<_T>()))
+    >::type>
+    : public std::true_type
 {};
 
 template <class _T>

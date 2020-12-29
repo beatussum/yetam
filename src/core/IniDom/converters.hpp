@@ -21,14 +21,6 @@
 
 #include "../type_traits.hpp"
 
-#define YETAM_DECLARE_INI_CONVERTER(T)               \
-template <>                                          \
-struct converter<T> final                            \
-{                                                    \
-    static std::string convert(std::add_const_t<T>); \
-    static T deconvert(const std::string_view);      \
-};
-
 namespace IniDom
 {
     template <class _T, typename _enabled = std::true_type>
@@ -48,9 +40,47 @@ namespace IniDom
         }
     };
 
-    YETAM_DECLARE_INI_CONVERTER(bool)
-    YETAM_DECLARE_INI_CONVERTER(char)
-    YETAM_DECLARE_INI_CONVERTER(std::string)
+    template <>
+    struct converter<bool> final
+    {
+        static std::string convert(const bool __v)
+        {
+            return __v ? "true" : "false";
+        }
+
+        static bool deconvert(const std::string_view __s)
+        {
+            return __s == "true";
+        }
+    };
+
+    template <>
+    struct converter<char> final
+    {
+        static std::string convert(const char __v)
+        {
+            return std::string(1, __v);
+        }
+
+        static char deconvert(const std::string_view __s)
+        {
+            return __s.front();
+        }
+    };
+
+    template <>
+    struct converter<std::string> final
+    {
+        static std::string convert(const std::string __v)
+        {
+            return __v;
+        }
+
+        static std::string deconvert(const std::string __s)
+        {
+            return __s;
+        }
+    };
 };
 
 #endif // YETAM_CORE_INIDOM_CONVERTERS_HPP
