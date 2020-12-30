@@ -22,10 +22,10 @@ namespace IniDom
 {
     template <class _Container>
     typename _Container::reference Section::find_by_name( _Container& __c
-                                                        , const std::string_view __name)
+                                                        , const std::string_view __n)
     {
         return *std::find_if(__c.begin(), __c.end(),
-            [&](typename _Container::const_reference __r) { return __r.m_name_ == __name; }
+            [&](typename _Container::const_reference __r) { return __r.m_name_ == __n; }
         );
     }
 }

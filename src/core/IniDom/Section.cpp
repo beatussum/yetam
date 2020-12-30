@@ -16,7 +16,7 @@
  */
 
 
-#include "Section.hpp"
+#include "core/IniDom/Section.hpp"
 
 namespace IniDom
 {
@@ -54,8 +54,8 @@ namespace IniDom
 
     Section::Section(std::string __name)
         : m_name_(std::move(__name))
-        , m_subsections_()
         , m_parameters_()
+        , m_subsections_()
     {
         check_name(m_name_);
     }

@@ -19,7 +19,7 @@
 #ifndef YETAM_INIDOM_SECTION_HPP
 #define YETAM_INIDOM_SECTION_HPP
 
-#include "Parameter.hpp"
+#include "core/IniDom/Parameter.hpp"
 
 #include <list>
 
@@ -28,8 +28,8 @@ namespace IniDom
     class Section
     {
     private:
-        using subsections_t = std::list<Section>;
         using parameters_t = std::list<Parameter>;
+        using subsections_t = std::list<Section>;
     private:
         void check_name(const std::string_view) const;
 
@@ -43,24 +43,24 @@ namespace IniDom
         explicit Section(std::string __name);
     public:
         std::string get_name() const { return m_name_; }
+
+        bool is_empty() const;
+        bool has_parameters() const { return !m_parameters_.empty(); }
+        bool has_subsections() const { return !m_subsections_.empty(); }
     public:
         explicit operator std::string() const { return toString(m_name_); }
 
-        bool is_empty() const;
-        bool has_subsections() const { return !m_subsections_.empty(); }
-        bool has_parameters() const { return !m_parameters_.empty(); }
-
-        Section& operator<<(Section);
         Section& operator<<(Parameter);
+        Section& operator<<(Section);
 
-        Section& find_subsection(const std::string_view __name);
         Parameter& find_parameter(const std::string_view __name);
+        Section& find_subsection(const std::string_view __name);
     private:
         const std::string m_name_;
-        subsections_t m_subsections_;
         parameters_t m_parameters_;
+        subsections_t m_subsections_;
     };
 }
 
-#include "Section.ipp"
+#include "core/IniDom/Section.ipp"
 #endif // YETAM_INIDOM_SECTION_HPP

@@ -27,5 +27,6 @@ set(YETAM_CPP
     main.cpp)
 
 add_executable(yetam "${YETAM_HPP}" "${YETAM_IPP}" "${YETAM_CPP}")
+target_include_directories(yetam PRIVATE "${CMAKE_SOURCE_DIR}/src")
 
 add_to_doc("${YETAM_HPP}")

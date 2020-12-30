@@ -16,7 +16,7 @@
  */
 
 
-#include "Parameter.hpp"
+#include "core/IniDom/Parameter.hpp"
 
 namespace IniDom
 {

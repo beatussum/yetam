@@ -19,12 +19,15 @@
 #ifndef YETAM_CORE_INIDOM_CONVERTERS_HPP
 #define YETAM_CORE_INIDOM_CONVERTERS_HPP
 
-#include "../type_traits.hpp"
+#include "core/type_traits.hpp"
 
 namespace IniDom
 {
+    template <class _T, typename _enabled = std::true_type>
+    struct converter final {};
+
     template <class _T>
-    struct converter
+    struct converter<_T, is_cstring_like_t<_T>> final
     {
     private:
         using convertible_type =
@@ -42,7 +45,7 @@ namespace IniDom
     };
 
     template <>
-    struct converter<bool>
+    struct converter<bool> final
     {
         static std::string convert(const bool __v)
         {
@@ -56,7 +59,7 @@ namespace IniDom
     };
 
     template <>
-    struct converter<char>
+    struct converter<char> final
     {
         static std::string convert(const char __v)
         {
@@ -70,7 +73,7 @@ namespace IniDom
     };
 
     template <>
-    struct converter<std::string>
+    struct converter<std::string> final
     {
         static std::string convert(std::string __v) { return __v; }
         static std::string deconvert(std::string __s) { return __s; }

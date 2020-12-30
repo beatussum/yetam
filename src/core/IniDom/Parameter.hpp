@@ -19,7 +19,7 @@
 #ifndef YETAM_INIDOM_PARAMETER_HPP
 #define YETAM_INIDOM_PARAMETER_HPP
 
-#include "converters.hpp"
+#include "core/IniDom/converters.hpp"
 
 namespace IniDom
 {
