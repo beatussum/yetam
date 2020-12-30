@@ -23,63 +23,57 @@
 
 namespace IniDom
 {
-    template <class _T, typename _enabled = std::true_type>
-    struct converter final {};
-
     template <class _T>
-    struct converter<_T, is_cstring_like_t<_T>> final
+    struct converter
     {
-        static std::string convert(const _T __v)
+    private:
+        using convertible_type =
+            typename is_cstring_like<_T>::convertible_type;
+    public:
+        static std::string convert(const _T& __v)
         {
             return static_cast<std::string>(__v);
         }
 
-        static _T deconvert(const std::string_view __s)
+        static convertible_type deconvert(const std::string& __s)
         {
             return __s.data();
         }
     };
 
     template <>
-    struct converter<bool> final
+    struct converter<bool>
     {
         static std::string convert(const bool __v)
         {
             return __v ? "true" : "false";
         }
 
-        static bool deconvert(const std::string_view __s)
+        static bool deconvert(const std::string& __s)
         {
             return __s == "true";
         }
     };
 
     template <>
-    struct converter<char> final
+    struct converter<char>
     {
         static std::string convert(const char __v)
         {
             return std::string(1, __v);
         }
 
-        static char deconvert(const std::string_view __s)
+        static char deconvert(const std::string& __s)
         {
             return __s.front();
         }
     };
 
     template <>
-    struct converter<std::string> final
+    struct converter<std::string>
     {
-        static std::string convert(const std::string __v)
-        {
-            return __v;
-        }
-
-        static std::string deconvert(const std::string __s)
-        {
-            return __s;
-        }
+        static std::string convert(std::string __v) { return __v; }
+        static std::string deconvert(std::string __s) { return __s; }
     };
 };
 

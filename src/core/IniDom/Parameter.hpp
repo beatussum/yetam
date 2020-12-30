@@ -28,17 +28,26 @@ namespace IniDom
         friend class Section;
     public:
         template <class _T>
+        Parameter(std::string __name, const _T& __value)
+            : m_name_(std::move(__name))
+            , m_value_(converter<_T>::convert(__value))
+        {}
+
+        template <class _T>
         Parameter(std::string __name, _T&& __value)
             : m_name_(std::move(__name))
-            , m_value_(converter<_T>::convert(std::forward<_T>(__value)))
+            , m_value_(converter<remove_cvref_t<_T>>
+                       ::convert(std::forward<_T>(__value)))
         {}
+    public:
+        std::string get_name() const { return m_name_; }
     public:
         template <class _T>
         _T as() const { return converter<_T>::deconvert(m_value_); }
 
         explicit operator std::string() const;
     private:
-        std::string m_name_;
+        const std::string m_name_;
         std::string m_value_;
     };
 }

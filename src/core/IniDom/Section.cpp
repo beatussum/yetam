@@ -52,9 +52,6 @@ namespace IniDom
 
             for (const auto& i : m_parameters_)
                 ret += static_cast<std::string>(i);
-
-            if (has_subsections())
-                ret += '\n';
         }
 
         for (const auto& i : m_subsections_) {

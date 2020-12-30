@@ -21,27 +21,37 @@
 
 #include <string>
 
-template <class _T, typename _enabled = std::true_type>
-struct is_cstring_like : public std::false_type {};
+template <class _T>
+struct remove_cvref
+{
+    using type = std::remove_cv_t<std::remove_reference_t<_T>>;
+};
 
 template <class _T>
-struct is_cstring_like<
-    _T,
-    typename std::is_convertible<
-        decltype(std::string().data()),
-        _T
-    >::type>
-    : public std::true_type
+using remove_cvref_t = typename remove_cvref<_T>::type;
+
+
+template <class _T>
+struct is_cstring_like
+    : public std::bool_constant<
+          std::is_convertible_v<_T, std::string> &&
+          std::is_convertible_v<
+              decltype(std::string().data()),
+              _T
+          >
+      >
+{
+    using convertible_type = _T;
+};
+
+template <class _T, size_t _s>
+struct is_cstring_like<_T[_s]>
+    : public is_cstring_like<const _T*>
 {};
 
-template <class _T>
-struct is_cstring_like<
-    _T,
-    typename std::is_convertible<
-        decltype(std::string().data()),
-        decltype(std::begin(std::declval<_T>()))
-    >::type>
-    : public std::true_type
+template <class _T, size_t _s>
+struct is_cstring_like<_T (&)[_s]>
+    : public is_cstring_like<const _T*>
 {};
 
 template <class _T>
