@@ -35,7 +35,7 @@ namespace IniDom
         typename _Container::reference find_by_name( _Container&
                                                    , const std::string_view);
 
-        std::string toString(const std::string& __fullname) const;
+        std::string to_string(const std::string& __fullname) const;
     public:
         Section() noexcept = default;
         explicit Section(std::string __name);
@@ -46,7 +46,7 @@ namespace IniDom
         bool has_parameters() const { return !m_parameters_.empty(); }
         bool has_subsections() const { return !m_subsections_.empty(); }
     public:
-        explicit operator std::string() const { return toString(m_name_); }
+        explicit operator std::string() const { return to_string(m_name_); }
 
         Section& operator<<(Parameter);
         Section& operator<<(Section);

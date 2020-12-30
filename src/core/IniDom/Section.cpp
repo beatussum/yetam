@@ -20,7 +20,7 @@
 
 namespace IniDom
 {
-    std::string Section::toString(const std::string& __fullname) const
+    std::string Section::to_string(const std::string& __fullname) const
     {
         std::string ret;
 
@@ -38,7 +38,7 @@ namespace IniDom
             if (i.is_empty())
                 continue;
 
-            ret += i.toString(__fullname + '/' + i.m_name_);
+            ret += i.to_string(__fullname + '/' + i.m_name_);
         }
 
         return ret;
