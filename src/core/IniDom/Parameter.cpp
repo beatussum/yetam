@@ -22,6 +22,6 @@ namespace IniDom
 {
     Parameter::operator std::string() const
     {
-        return m_name_ + '=' + static_cast<std::string>(m_value_) + '\n';
+        return m_name_ + '=' + m_value_ + '\n';
     }
 }
