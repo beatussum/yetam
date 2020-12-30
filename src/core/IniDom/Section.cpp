@@ -18,8 +18,6 @@
 
 #include "Section.hpp"
 
-#include <algorithm>
-
 namespace IniDom
 {
     void Section::check_name(const std::string_view __n) const
@@ -28,6 +26,30 @@ namespace IniDom
             throw std::invalid_argument("The section name cannot contain "
                                         "slash (\"/\").");
         }
+    }
+
+    std::string Section::toString(const std::string& __fullname) const
+    {
+        std::string ret;
+
+        if (has_parameters()) {
+            ret += '[' + __fullname + "]\n";
+
+            for (const auto& i : m_parameters_)
+                ret += static_cast<std::string>(i);
+
+            if (has_subsections())
+                ret += '\n';
+        }
+
+        for (const auto& i : m_subsections_) {
+            if (i.is_empty())
+                continue;
+
+            ret += i.toString(__fullname + '/' + i.m_name_);
+        }
+
+        return ret;
     }
 
     Section::Section(std::string __name)
@@ -43,31 +65,8 @@ namespace IniDom
         return !has_subsections() && !has_parameters();
     }
 
-    Section::operator std::string() const
-    {
-        std::string ret;
-
-        if (has_parameters()) {
-            ret += '[' + m_name_ + "]\n";
-
-            for (const auto& i : m_parameters_)
-                ret += static_cast<std::string>(i);
-        }
-
-        for (const auto& i : m_subsections_) {
-            if (i.is_empty())
-                continue;
-
-            ret += static_cast<std::string>(i);
-        }
-
-        return ret;
-    }
-
     Section& Section::operator<<(Section __s)
     {
-        __s.m_name_ = m_name_ + '/' + __s.m_name_;
-
         m_subsections_.push_back(std::move(__s));
 
         return *this;
@@ -80,25 +79,13 @@ namespace IniDom
         return *this;
     }
 
-    Section& Section::find_subsection(const std::string& __name)
+    Section& Section::find_subsection(const std::string_view __name)
     {
-        check_name(__name);
-
-        return *std::find_if(m_subsections_.begin(), m_subsections_.end(),
-            [&](const Section& __r) {
-                if (__r.m_name_.size() < ( __name.size() + 1 ))
-                    return false;
-
-                return __r.m_name_.compare( __r.m_name_.size() - ( __name.size() + 1 )
-                                          , std::string::npos, '/' + __name) == 0;
-            }
-        );
+        return find_by_name(m_subsections_, __name);
     }
 
     Parameter& Section::find_parameter(const std::string_view __name)
     {
-        return *std::find_if(m_parameters_.begin(), m_parameters_.end(),
-            [&](const Parameter& __r) { return __r.m_name_ == __name; }
-        );
+        return find_by_name(m_parameters_, __name);
     }
 }

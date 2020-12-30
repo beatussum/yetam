@@ -32,27 +32,35 @@ namespace IniDom
         using parameters_t = std::list<Parameter>;
     private:
         void check_name(const std::string_view) const;
+
+        template <class _Container>
+        typename _Container::reference find_by_name( _Container&
+                                                   , const std::string_view);
+
+        std::string toString(const std::string& __fullname) const;
     public:
         Section() noexcept = default;
         explicit Section(std::string __name);
     public:
-        explicit operator std::string() const;
+        std::string get_name() const { return m_name_; }
+    public:
+        explicit operator std::string() const { return toString(m_name_); }
 
         bool is_empty() const;
         bool has_subsections() const { return !m_subsections_.empty(); }
         bool has_parameters() const { return !m_parameters_.empty(); }
-        std::string get_name() const { return m_name_; }
 
         Section& operator<<(Section);
         Section& operator<<(Parameter);
 
-        Section& find_subsection(const std::string& __name);
+        Section& find_subsection(const std::string_view __name);
         Parameter& find_parameter(const std::string_view __name);
     private:
-        std::string m_name_;
+        const std::string m_name_;
         subsections_t m_subsections_;
         parameters_t m_parameters_;
     };
 }
 
+#include "Section.ipp"
 #endif // YETAM_INIDOM_SECTION_HPP
