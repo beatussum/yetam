@@ -20,14 +20,6 @@
 
 namespace IniDom
 {
-    void Section::check_name(const std::string_view __n) const
-    {
-        if (__n.find('/') != std::string::npos) {
-            throw std::invalid_argument("The section name cannot contain "
-                                        "slash (\"/\").");
-        }
-    }
-
     std::string Section::toString(const std::string& __fullname) const
     {
         std::string ret;
@@ -57,7 +49,11 @@ namespace IniDom
         , m_parameters_()
         , m_subsections_()
     {
-        check_name(m_name_);
+        if (m_name_.find('/') != std::string::npos) {
+            throw std::invalid_argument( "The section name (\"" + m_name_
+                                       + "\") cannot contain "
+                                         "slash (\"/\").");
+        }
     }
 
     bool Section::is_empty() const

@@ -31,8 +31,6 @@ namespace IniDom
         using parameters_t = std::list<Parameter>;
         using subsections_t = std::list<Section>;
     private:
-        void check_name(const std::string_view) const;
-
         template <class _Container>
         typename _Container::reference find_by_name( _Container&
                                                    , const std::string_view);
