@@ -43,7 +43,7 @@ namespace IniDom
         std::string get_name() const { return m_name_; }
     public:
         template <class _T>
-        _T as() const { return converter<_T>::deconvert(m_value_); }
+        auto as() const { return converter<_T>::deconvert(m_value_); }
 
         explicit operator std::string() const;
     private:
