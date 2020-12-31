@@ -19,6 +19,7 @@
 #ifndef YETAM_CORE_INIDOM_CONVERTERS_HPP
 #define YETAM_CORE_INIDOM_CONVERTERS_HPP
 
+#include "core/core.hpp"
 #include "core/type_traits.hpp"
 
 namespace IniDom
@@ -41,6 +42,22 @@ namespace IniDom
         static convertible_type deconvert(const std::string& __s)
         {
             return __s.data();
+        }
+    };
+
+    template <class _T>
+    struct converter<_T, is_strict_number_t<_T>> final
+    {
+        static std::string convert(const _T& __v)
+        {
+            using std::to_string, ::to_string;
+
+            return to_string(__v);
+        }
+
+        static _T deconvert(const std::string& __s)
+        {
+            return str_to_number<_T>(__s);
         }
     };
 
