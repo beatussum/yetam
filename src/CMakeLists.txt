@@ -18,10 +18,12 @@ set(YETAM_HPP
     core/core.hpp
     core/type_traits.hpp
     core/IniDom/converters.hpp
+    core/IniDom/core.hpp
     core/IniDom/Parameter.hpp
     core/IniDom/Section.hpp)
 set(YETAM_IPP
-    core/core.ipp)
+    core/core.ipp
+    core/IniDom/Parameter.ipp)
 set(YETAM_CPP
     core/core.cpp
     core/IniDom/Parameter.cpp
