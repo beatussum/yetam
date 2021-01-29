@@ -24,11 +24,11 @@
 template <typename _T>
 struct is_character
     : public std::bool_constant<
-          std::is_same_v<_T, char> &&
-          std::is_same_v<_T, signed char> &&
-          std::is_same_v<_T, unsigned char> &&
-          std::is_same_v<_T, wchar_t> &&
-          std::is_same_v<_T, char16_t> &&
+          std::is_same_v<_T, char> ||
+          std::is_same_v<_T, signed char> ||
+          std::is_same_v<_T, unsigned char> ||
+          std::is_same_v<_T, wchar_t> ||
+          std::is_same_v<_T, char16_t> ||
           std::is_same_v<_T, char32_t>
       >
 {};
