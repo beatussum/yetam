@@ -20,6 +20,36 @@
 
 namespace IniDom
 {
+    bool operator<(const Parameter& a, const std::string_view b) noexcept
+    {
+        return a.m_name_ < b;
+    }
+
+    bool operator>(const Parameter& a, const std::string_view b) noexcept
+    {
+        return a.m_name_ > b;
+    }
+
+    bool operator<(const std::string_view a, const Parameter& b) noexcept
+    {
+        return a < b.m_name_;
+    }
+
+    bool operator>(const std::string_view a, const Parameter& b) noexcept
+    {
+        return a > b.m_name_;
+    }
+
+    bool Parameter::operator<(const Parameter& b) const noexcept
+    {
+        return m_name_ < b.m_name_;
+    }
+
+    bool Parameter::operator>(const Parameter& b) const noexcept
+    {
+        return m_name_ > b.m_name_;
+    }
+
     Parameter::operator std::string() const
     {
         return m_name_ + '=' + m_value_ + '\n';

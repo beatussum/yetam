@@ -26,13 +26,11 @@ namespace IniDom
     class Parameter
     {
         friend class Section;
+        friend bool operator<(const Parameter&, const std::string_view) noexcept;
+        friend bool operator>(const Parameter&, const std::string_view) noexcept;
+        friend bool operator<(const std::string_view, const Parameter&) noexcept;
+        friend bool operator>(const std::string_view, const Parameter&) noexcept;
     public:
-        template <class _T>
-        Parameter(std::string __name, const _T& __value)
-            : m_name_(std::move(__name))
-            , m_value_(converter<_T>::convert(__value))
-        {}
-
         template <class _T>
         Parameter(std::string __name, _T&& __value)
             : m_name_(std::move(__name))
@@ -42,10 +40,13 @@ namespace IniDom
     public:
         std::string get_name() const { return m_name_; }
     public:
+        explicit operator std::string() const;
+
+        bool operator<(const Parameter&) const noexcept;
+        bool operator>(const Parameter&) const noexcept;
+
         template <class _T>
         auto as() const { return converter<_T>::deconvert(m_value_); }
-
-        explicit operator std::string() const;
     private:
         const std::string m_name_;
         std::string m_value_;

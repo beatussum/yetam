@@ -21,23 +21,22 @@
 
 #include "core/IniDom/Parameter.hpp"
 
-#include <list>
+#include <set>
 
 namespace IniDom
 {
     class Section
     {
+        friend bool operator<(const Section&, const std::string_view) noexcept;
+        friend bool operator>(const Section&, const std::string_view) noexcept;
+        friend bool operator<(const std::string_view, const Section&) noexcept;
+        friend bool operator>(const std::string_view, const Section&) noexcept;
     private:
-        using parameters_t = std::list<Parameter>;
-        using subsections_t = std::list<Section>;
+        using parameters_t = std::set<Parameter, std::less<>>;
+        using subsections_t = std::set<Section, std::less<>>;
     private:
-        template <class _Container>
-        typename _Container::reference find_by_name( _Container&
-                                                   , const std::string_view);
-
-        std::string to_string(const std::string& __fullname) const;
+        std::string to_string(const std::string& __path) const;
     public:
-        Section() noexcept = default;
         explicit Section(std::string __name);
     public:
         std::string get_name() const { return m_name_; }
@@ -48,11 +47,14 @@ namespace IniDom
     public:
         explicit operator std::string() const { return to_string(m_name_); }
 
+        bool operator<(const Section&) const noexcept;
+        bool operator>(const Section&) const noexcept;
+
         Section& operator<<(Parameter);
         Section& operator<<(Section);
 
-        Parameter& find_parameter(const std::string_view __name);
-        Section& find_subsection(const std::string_view __name);
+        Parameter& parameter(const std::string_view __name);
+        Section& subsection(const std::string_view __name);
     private:
         const std::string m_name_;
         parameters_t m_parameters_;
@@ -60,5 +62,4 @@ namespace IniDom
     };
 }
 
-#include "core/IniDom/Section.ipp"
 #endif // YETAM_INIDOM_SECTION_HPP

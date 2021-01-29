@@ -20,12 +20,32 @@
 
 namespace IniDom
 {
-    std::string Section::to_string(const std::string& __fullname) const
+    bool operator<(const Section& a, const std::string_view b) noexcept
+    {
+        return a.m_name_ < b;
+    }
+
+    bool operator>(const Section& a, const std::string_view b) noexcept
+    {
+        return a.m_name_ > b;
+    }
+
+    bool operator<(const std::string_view a, const Section& b) noexcept
+    {
+        return a < b.m_name_;
+    }
+
+    bool operator>(const std::string_view a, const Section& b) noexcept
+    {
+        return a > b.m_name_;
+    }
+
+    std::string Section::to_string(const std::string& __path) const
     {
         std::string ret;
 
         if (has_parameters()) {
-            ret += '[' + __fullname + "]\n";
+            ret += '[' + __path + "]\n";
 
             for (const auto& i : m_parameters_)
                 ret += static_cast<std::string>(i);
@@ -38,7 +58,7 @@ namespace IniDom
             if (i.is_empty())
                 continue;
 
-            ret += i.to_string(__fullname + '/' + i.m_name_);
+            ret += i.to_string(__path + '/' + i.m_name_);
         }
 
         return ret;
@@ -61,27 +81,51 @@ namespace IniDom
         return !has_subsections() && !has_parameters();
     }
 
+    bool Section::operator<(const Section& b) const noexcept
+    {
+        return m_name_ < b.m_name_;
+    }
+
+    bool Section::operator>(const Section& b) const noexcept
+    {
+        return m_name_ > b.m_name_;
+    }
+
     Section& Section::operator<<(Section __s)
     {
-        m_subsections_.push_back(std::move(__s));
+        m_subsections_.insert(__s);
 
         return *this;
     }
 
     Section& Section::operator<<(Parameter __p)
     {
-        m_parameters_.push_back(std::move(__p));
+        m_parameters_.insert(__p);
 
         return *this;
     }
 
-    Section& Section::find_subsection(const std::string_view __name)
+    /*
+     * In the following two methods, one allows oneself to `const_cast` because
+     * the implementation of equality and comparison are based on a constant
+     * member: e.g., even if the content of a subsection was changed, its name
+     * would not be.
+     */
+
+    Section& Section::subsection(const std::string_view __name)
     {
-        return find_by_name(m_subsections_, __name);
+        const auto match = __name.find('/');
+
+        if (match == std::string_view::npos) {
+            return const_cast<Section&>(*m_subsections_.find(__name));
+        } else {
+            return const_cast<Section&>(*m_subsections_.find(__name.substr(0, match)))
+                   .subsection(__name.substr(match + 1));
+        }
     }
 
-    Parameter& Section::find_parameter(const std::string_view __name)
+    Parameter& Section::parameter(const std::string_view __name)
     {
-        return find_by_name(m_parameters_, __name);
+        return const_cast<Parameter&>(*m_parameters_.find(__name));
     }
 }
