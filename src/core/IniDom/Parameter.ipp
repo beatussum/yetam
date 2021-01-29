@@ -16,21 +16,23 @@
  */
 
 
-#ifndef YETAM_CORE_CORE_HPP
-#define YETAM_CORE_CORE_HPP
+#include "core/IniDom/core.hpp"
 
-#include <array>
-
-namespace yetam::core
+namespace yetam::core::IniDom
 {
-    template <std::size_t _s>
-    bool contains_any_of(const std::string_view, const std::array<char, _s>&);
-
-    template <class _Number>
-    _Number str_to_number(const std::string_view);
-
-    std::string to_string(const std::byte);
+    template <class _T>
+    Parameter::Parameter(std::string __name, _T&& __value)
+        : m_name_(std::move(__name))
+        , m_value_(converter<remove_cvref_t<_T>>
+                   ::convert(std::forward<_T>(__value)))
+    {
+        if (  contains_any_of(m_name_, forbidden_characters)
+           || contains_any_of(m_value_, forbidden_characters))
+        {
+            throw std::invalid_argument( "The parameter (\""
+                                       + static_cast<std::string>(*this)
+                                       + "\") cannot contain a forbidden "
+                                         "character.");
+        }
+    }
 }
-
-#include "core/core.ipp"
-#endif // YETAM_CORE_CORE_HPP

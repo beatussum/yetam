@@ -18,8 +18,20 @@
 
 namespace yetam::core
 {
+    template <std::size_t _s>
+    bool contains_any_of( const std::string_view __s
+                        , const std::array<char, _s>& __a)
+    {
+        for (const auto i : __a) {
+            if (__s.find(i) != std::string_view::npos)
+                return true;
+        }
+
+        return false;
+    }
+
     template <class _Number>
-    _Number str_to_number(const std::string& __s)
+    _Number str_to_number(const std::string_view __s)
     {
         if (std::is_floating_point_v<_Number>) {
             return static_cast<_Number>(strtold(__s.data(), nullptr));

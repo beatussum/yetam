@@ -32,11 +32,7 @@ namespace yetam::core::IniDom
         friend bool operator>(const std::string_view, const Parameter&) noexcept;
     public:
         template <class _T>
-        Parameter(std::string __name, _T&& __value)
-            : m_name_(std::move(__name))
-            , m_value_(converter<remove_cvref_t<_T>>
-                       ::convert(std::forward<_T>(__value)))
-        {}
+        Parameter(std::string __name, _T&& __value);
     public:
         std::string get_name() const { return m_name_; }
     public:
@@ -53,4 +49,5 @@ namespace yetam::core::IniDom
     };
 }
 
+#include "core/IniDom/Parameter.ipp"
 #endif // YETAM_INIDOM_PARAMETER_HPP

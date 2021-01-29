@@ -15,7 +15,6 @@
  * this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 #include "core/IniDom/Section.hpp"
 
 namespace yetam::core::IniDom
@@ -69,10 +68,10 @@ namespace yetam::core::IniDom
         , m_parameters_()
         , m_subsections_()
     {
-        if (m_name_.find('/') != std::string::npos) {
+        if (contains_any_of(m_name_, forbidden_characters)) {
             throw std::invalid_argument( "The section name (\"" + m_name_
-                                       + "\") cannot contain "
-                                         "slash (\"/\").");
+                                       + "\") cannot contain a forbidden "
+                                         "character.");
         }
     }
 

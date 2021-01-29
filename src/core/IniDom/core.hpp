@@ -16,21 +16,14 @@
  */
 
 
-#ifndef YETAM_CORE_CORE_HPP
-#define YETAM_CORE_CORE_HPP
+#ifndef YETAM_INIDOM_CORE_HPP
+#define YETAM_INIDOM_CORE_HPP
 
 #include <array>
 
-namespace yetam::core
+namespace yetam::core::IniDom
 {
-    template <std::size_t _s>
-    bool contains_any_of(const std::string_view, const std::array<char, _s>&);
-
-    template <class _Number>
-    _Number str_to_number(const std::string_view);
-
-    std::string to_string(const std::byte);
+    static constexpr std::array forbidden_characters = {'/', '=', '[', ']'};
 }
 
-#include "core/core.ipp"
-#endif // YETAM_CORE_CORE_HPP
+#endif // YETAM_INIDOM_CORE_HPP
