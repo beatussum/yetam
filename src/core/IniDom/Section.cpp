@@ -18,7 +18,7 @@
 
 #include "core/IniDom/Section.hpp"
 
-namespace IniDom
+namespace yetam::core::IniDom
 {
     bool operator<(const Section& a, const std::string_view b) noexcept
     {

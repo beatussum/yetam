@@ -16,14 +16,17 @@
  */
 
 
-template <class _Number>
-_Number str_to_number(const std::string& __s)
+namespace yetam::core
 {
-    if (std::is_floating_point_v<_Number>) {
-        return static_cast<_Number>(strtold(__s.data(), nullptr));
-    } else if (std::is_signed_v<_Number>) {
-        return static_cast<_Number>(strtoll(__s.data(), nullptr, 10));
-    } else {
-        return static_cast<_Number>(strtoull(__s.data(), nullptr, 10));
+    template <class _Number>
+    _Number str_to_number(const std::string& __s)
+    {
+        if (std::is_floating_point_v<_Number>) {
+            return static_cast<_Number>(strtold(__s.data(), nullptr));
+        } else if (std::is_signed_v<_Number>) {
+            return static_cast<_Number>(strtoll(__s.data(), nullptr, 10));
+        } else {
+            return static_cast<_Number>(strtoull(__s.data(), nullptr, 10));
+        }
     }
 }

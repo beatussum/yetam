@@ -21,7 +21,7 @@
 
 #include "core/IniDom/converters.hpp"
 
-namespace IniDom
+namespace yetam::core::IniDom
 {
     class Parameter
     {

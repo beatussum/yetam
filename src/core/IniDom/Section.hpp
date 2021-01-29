@@ -23,7 +23,7 @@
 
 #include <set>
 
-namespace IniDom
+namespace yetam::core::IniDom
 {
     class Section
     {

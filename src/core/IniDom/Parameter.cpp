@@ -18,7 +18,7 @@
 
 #include "core/IniDom/Parameter.hpp"
 
-namespace IniDom
+namespace yetam::core::IniDom
 {
     bool operator<(const Parameter& a, const std::string_view b) noexcept
     {

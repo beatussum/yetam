@@ -21,10 +21,13 @@
 
 #include <string>
 
-template <class _Number>
-_Number str_to_number(const std::string&);
+namespace yetam::core
+{
+    template <class _Number>
+    _Number str_to_number(const std::string&);
 
-std::string to_string(const std::byte);
+    std::string to_string(const std::byte);
+}
 
 #include "core/core.ipp"
 #endif // YETAM_CORE_CORE_HPP

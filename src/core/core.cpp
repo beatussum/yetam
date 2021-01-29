@@ -20,7 +20,10 @@
 
 #include <cstddef>
 
-std::string to_string(const std::byte __n)
+namespace yetam::core
 {
-    return std::to_string(std::to_integer<unsigned int>(__n));
+    std::string to_string(const std::byte __n)
+    {
+        return std::to_string(std::to_integer<unsigned int>(__n));
+    }
 }

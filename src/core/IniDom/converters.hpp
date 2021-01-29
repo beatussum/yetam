@@ -22,7 +22,7 @@
 #include "core/core.hpp"
 #include "core/type_traits.hpp"
 
-namespace IniDom
+namespace yetam::core::IniDom
 {
     template <class _T, typename _enabled = std::true_type>
     struct converter final {};
@@ -50,7 +50,7 @@ namespace IniDom
     {
         static std::string convert(const _T& __v)
         {
-            using std::to_string, ::to_string;
+            using std::to_string;
 
             return to_string(__v);
         }
